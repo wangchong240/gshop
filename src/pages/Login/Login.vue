@@ -4,13 +4,13 @@
       <div class="login_header">
         <h2 class="login_logo">硅谷外卖</h2>
         <div class="login_header_title">
-          <a href="javascript:" class="on">短信登录</a>
-          <a href="javascript:">密码登录</a>
+          <a href="javascript:" :class="{on: isPhone}" @click="setLoginType()">短信登录</a>
+          <a href="javascript:" :class="{on: !isPhone}" @click="setLoginType()">密码登录</a>
         </div>
       </div>
       <div class="login_content">
         <form>
-          <div class="on">
+          <div :class="{on: isPhone}">
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号">
               <button disabled="disabled" class="get_verification">获取验证码</button>
@@ -23,7 +23,7 @@
               <a href="javascript:">《用户服务协议》</a>
             </section>
           </div>
-          <div>
+          <div :class="{on: !isPhone}">
             <section>
               <section class="login_message">
                 <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
@@ -54,7 +54,17 @@
 
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  data() {
+    return {
+      isPhone: true
+    }
+  },
+  methods: {
+    setLoginType() {
+      this.isPhone = !this.isPhone;
+    }
+  }
 }
 </script>
 
