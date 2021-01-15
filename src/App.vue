@@ -11,6 +11,9 @@ export default {
   name: 'App',
   components: {
     'v-footer': FooterGuide
+  },
+  mounted () {
+    this.$store.dispatch('getAddress');
   }
 }
 </script>
