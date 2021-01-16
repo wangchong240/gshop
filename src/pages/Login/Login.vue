@@ -12,8 +12,10 @@
         <form>
           <div :class="{on: isPhone}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号">
-              <button disabled="disabled" class="get_verification">获取验证码</button>
+              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <button :disabled="!rightPhone" class="get_verification" :class="{right_phone: rightPhone}" @click="getCode()">
+                {{downTime === 0 ? '获取验证码' : `已发送(${downTime})s`}}
+              </button>
             </section>
             <section class="login_verification">
               <input type="tel" maxlength="8" placeholder="验证码">
@@ -53,16 +55,43 @@
 </template>
 
 <script>
+// 倒计时时间
+const COUNT_DOWN_TIME = 30
+
 export default {
   name: 'Login',
-  data() {
+  data () {
     return {
-      isPhone: true
+      isPhone: true,
+      phone: '',
+      downTime: 0
     }
   },
   methods: {
-    setLoginType() {
-      this.isPhone = !this.isPhone;
+    setLoginType () {
+      this.isPhone = !this.isPhone
+    },
+    // 获取验证码
+    getCode () {
+      // 1.倒计时
+      if (this.downTime === 0) {
+        this.downTime = COUNT_DOWN_TIME
+        const id = setInterval(() => {
+          // 倒计时减1
+          this.downTime = this.downTime - 1
+          // 停止定时器
+          if (this.downTime === 0) {
+            // 停止定时器
+            clearTimeout(id)
+          }
+        }, 1000)
+      }
+      // 2.发送ajaxq请求
+    }
+  },
+  computed: {
+    rightPhone () {
+      return /^1\d{10}$/.test(this.phone)
     }
   }
 }
@@ -74,35 +103,44 @@ export default {
   width 100%
   height 100%
   background #fff
+
   .loginInner
     padding-top 60px
     width 80%
     margin 0 auto
+
     .login_header
       .login_logo
         font-size 40px
         font-weight bold
         color #02a774
         text-align center
+
       .login_header_title
         padding-top 40px
         text-align center
-        >a
+
+        > a
           color #333
           font-size 14px
           padding-bottom 4px
+
           &:first-child
             margin-right 40px
+
           &.on
             color #02a774
             font-weight 700
             border-bottom 2px solid #02a774
+
     .login_content
-      >form
-        >div
+      > form
+        > div
           display none
+
           &.on
             display block
+
           input
             width 100%
             height 100%
@@ -112,14 +150,17 @@ export default {
             border-radius 4px
             outline 0
             font 400 14px Arial
+
             &:focus
               border 1px solid #02a774
+
           .login_message
             position relative
             margin-top 16px
             height 48px
             font-size 14px
             background #fff
+
             .get_verification
               position absolute
               top 50%
@@ -129,17 +170,21 @@ export default {
               color #ccc
               font-size 14px
               background transparent
+              &.right_phone
+                color black
+
           .login_verification
             position relative
             margin-top 16px
             height 48px
             font-size 14px
             background #fff
+
             .switch_button
               font-size 12px
               border 1px solid #ddd
               border-radius 8px
-              transition background-color .3s,border-color .3s
+              transition background-color .3s, border-color .3s
               padding 0 6px
               width 30px
               height 16px
@@ -149,14 +194,18 @@ export default {
               top 50%
               right 10px
               transform translateY(-50%)
+
               &.off
                 background #fff
+
                 .switch_text
                   float right
                   color #ddd
+
               &.on
                 background #02a774
-              >.switch_circle
+
+              > .switch_circle
                 //transform translateX(27px)
                 position absolute
                 top -1px
@@ -166,15 +215,18 @@ export default {
                 border 1px solid #ddd
                 border-radius 50%
                 background #fff
-                box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
+                box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
                 transition transform .3s
+
           .login_hint
             margin-top 12px
             color #999
             font-size 14px
             line-height 20px
-            >a
+
+            > a
               color #02a774
+
         .login_submit
           display block
           width 100%
@@ -187,19 +239,22 @@ export default {
           font-size 16px
           line-height 42px
           border 0
+
       .about_us
         display block
         font-size 12px
         margin-top 20px
         text-align center
         color #999
+
     .go_back
       position absolute
       top 5px
       left 5px
       width 30px
       height 30px
-      >.iconfont
+
+      > .iconfont
         font-size 20px
         color #999
 </style>
