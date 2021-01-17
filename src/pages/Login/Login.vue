@@ -31,10 +31,11 @@
                 <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
               </section>
               <section class="login_verification">
-                <input type="tel" maxlength="8" placeholder="密码">
-                <div class="switch_button off">
-                  <div class="switch_circle"></div>
-                  <span class="switch_text">...</span>
+                <input type="text" maxlength="8" placeholder="密码" v-if="isOnPassword" v-model="pwd">
+                <input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">
+                <div class="switch_button" :class="isOnPassword ? 'on' : 'off'" @click="switchPassword()">
+                  <div class="switch_circle" :class="{'right': isOnPassword}"></div>
+                  <span class="switch_text">{{isOnPassword ? 'abc' : '...'}}</span>
                 </div>
               </section>
               <section class="login_message">
@@ -64,12 +65,17 @@ export default {
     return {
       isPhone: true,
       phone: '',
-      downTime: 0
+      downTime: 0,
+      isOnPassword: false,
+      pwd: ''
     }
   },
   methods: {
     setLoginType () {
       this.isPhone = !this.isPhone
+    },
+    switchPassword () {
+      this.isOnPassword = !this.isOnPassword
     },
     // 获取验证码
     getCode () {
@@ -206,7 +212,6 @@ export default {
                 background #02a774
 
               > .switch_circle
-                //transform translateX(27px)
                 position absolute
                 top -1px
                 left -1px
@@ -217,6 +222,8 @@ export default {
                 background #fff
                 box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
                 transition transform .3s
+                &.right
+                  transform translateX(30px)
 
           .login_hint
             margin-top 12px
