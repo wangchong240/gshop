@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="login_content">
-        <form>
+        <form @submit.prevent="login()">
           <div :class="{on: loginType}">
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
@@ -52,10 +52,13 @@
         <i class="iconfont icon-jiantou2"></i>
       </a>
     </div>
+    <!--显示警告框-->
+    <v-alert-tip :alert-text="alertText" @closeTip="closeTip()" v-show="showAlert"/>
   </section>
 </template>
 
 <script>
+import AlertTip from '../../components/AlertTip/AlertTip'
 // 倒计时时间
 const COUNT_DOWN_TIME = 30
 
@@ -70,8 +73,13 @@ export default {
       isOnPassword: false, // 是否显示密码
       name: '', // 用户名
       pwd: '', // 是否显示密码
-      captcha: '' // 图形验证码
+      captcha: '', // 图形验证码
+      alertText: '', // 提示信息
+      showAlert: false // 是否显示提醒框
     }
+  },
+  components: {
+    'v-alert-tip': AlertTip
   },
   methods: {
     // 设置登陆方式
@@ -98,6 +106,43 @@ export default {
         }, 1000)
       }
       // 2.发送ajaxq请求
+    },
+    // 设置提示信息
+    setAlertTip (alertText) {
+      this.showAlert = true
+      this.alertText = alertText
+    },
+    // 关闭提示框，传入组件中，主键负责调用
+    closeTip () {
+      this.alertText = ''
+      this.showAlert = false
+    },
+    // 登陆
+    login () {
+      // 1.前台表单验证
+      if (this.loginType) { // 手机验证码登陆
+        const {rightPhone, code} = this
+        if (!rightPhone) {
+          // 手机号不正确
+          this.setAlertTip('手机号不正确')
+        } else if (!/^\d{6}$/.test(code)) {
+          // 验证码不正确
+          this.setAlertTip('验证码不正确')
+        }
+      } else { // 密码登陆
+        const {name, pwd, captcha} = this
+        if (!name) {
+          // 用户名必须设置
+          this.setAlertTip('用户名必须设置')
+        } else if (!pwd) {
+          // 密码必须设置
+          this.setAlertTip('密码必须设置')
+        } else if (!captcha) {
+          // 验证码必须设置
+          this.setAlertTip('验证码必须设置')
+        }
+      }
+      // 2.后台登陆
     }
   },
   computed: {
