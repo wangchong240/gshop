@@ -74,9 +74,11 @@ export default {
     }
   },
   methods: {
+    // 设置登陆方式
     setLoginType () {
       this.loginType = !this.loginType
     },
+    // 切换密码显示隐藏
     switchPassword () {
       this.isOnPassword = !this.isOnPassword
     },
