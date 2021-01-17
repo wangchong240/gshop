@@ -4,31 +4,31 @@
       <div class="login_header">
         <h2 class="login_logo">硅谷外卖</h2>
         <div class="login_header_title">
-          <a href="javascript:" :class="{on: isPhone}" @click="setLoginType()">短信登录</a>
-          <a href="javascript:" :class="{on: !isPhone}" @click="setLoginType()">密码登录</a>
+          <a href="javascript:" :class="{on: loginType}" @click="setLoginType()">短信登录</a>
+          <a href="javascript:" :class="{on: !loginType}" @click="setLoginType()">密码登录</a>
         </div>
       </div>
       <div class="login_content">
         <form>
-          <div :class="{on: isPhone}">
+          <div :class="{on: loginType}">
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
-              <button :disabled="!rightPhone" class="get_verification" :class="{right_phone: rightPhone}" @click="getCode()">
+              <button :disabled="!rightPhone" class="get_verification" :class="{right_phone: rightPhone}" @click.prevent="getCode()">
                 {{downTime === 0 ? '获取验证码' : `已发送(${downTime})s`}}
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
               <a href="javascript:">《用户服务协议》</a>
             </section>
           </div>
-          <div :class="{on: !isPhone}">
+          <div :class="{on: !loginType}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
               </section>
               <section class="login_verification">
                 <input type="text" maxlength="8" placeholder="密码" v-if="isOnPassword" v-model="pwd">
@@ -39,7 +39,7 @@
                 </div>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
                 <img class="get_verification" src="./images/captcha.svg" alt="captcha">
               </section>
             </section>
@@ -63,16 +63,19 @@ export default {
   name: 'Login',
   data () {
     return {
-      isPhone: true,
-      phone: '',
-      downTime: 0,
-      isOnPassword: false,
-      pwd: ''
+      loginType: true, // 登陆方式 true:手机登陆,false: 密码登陆
+      phone: '', // 手机号
+      code: '', // 手机验证码
+      downTime: 0, // 倒计时时间
+      isOnPassword: false, // 是否显示密码
+      name: '', // 用户名
+      pwd: '', // 是否显示密码
+      captcha: '' // 图形验证码
     }
   },
   methods: {
     setLoginType () {
-      this.isPhone = !this.isPhone
+      this.loginType = !this.loginType
     },
     switchPassword () {
       this.isOnPassword = !this.isOnPassword
