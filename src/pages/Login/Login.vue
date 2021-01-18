@@ -75,7 +75,7 @@ export default {
       pwd: '', // 是否显示密码
       captcha: '', // 图形验证码
       alertText: '', // 提示信息
-      showAlert: false, // 是否显示提醒框
+      showAlert: false // 是否显示提醒框
     }
   },
   components: {
