@@ -164,6 +164,8 @@ export default {
       // 2.处理登录返回结果
       if (result.code === 0) {
         // 用户信息存入vuex的state中缓存
+        const userInfo = result.data
+        await this.$store.dispatch('recordUser', userInfo)
         // 路由到个人中心
         await this.$router.replace('/profile')
       } else {
