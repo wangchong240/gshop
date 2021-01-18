@@ -59,6 +59,7 @@
 
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip'
+import {reqSendCode} from '../../api/index'
 // 倒计时时间
 const COUNT_DOWN_TIME = 30
 
@@ -91,21 +92,34 @@ export default {
       this.isOnPassword = !this.isOnPassword
     },
     // 获取验证码
-    getCode () {
+    async getCode () {
       // 1.倒计时
       if (this.downTime === 0) {
         this.downTime = COUNT_DOWN_TIME
-        const id = setInterval(() => {
+        this.intervalId = setInterval(() => {
           // 倒计时减1
           this.downTime = this.downTime - 1
           // 停止定时器
           if (this.downTime === 0) {
             // 停止定时器
-            clearTimeout(id)
+            clearTimeout(this.intervalId)
           }
         }, 1000)
       }
       // 2.发送ajaxq请求
+      if (this.downTime) {
+        const result = await reqSendCode(this.phone)
+        if (result.code === 1) {
+          // 弹出警告框
+          this.setAlertTip(result.msg)
+          // 停止定时器
+          clearInterval(this.intervalId)
+          // 计时时间归零
+          this.downTime = 0
+          // 清空定时器ID
+          this.intervalId = null
+        }
+      }
     },
     // 设置提示信息
     setAlertTip (alertText) {
