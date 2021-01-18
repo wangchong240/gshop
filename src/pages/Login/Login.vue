@@ -40,7 +40,7 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha($event)">
               </section>
             </section>
           </div>
@@ -75,7 +75,7 @@ export default {
       pwd: '', // 是否显示密码
       captcha: '', // 图形验证码
       alertText: '', // 提示信息
-      showAlert: false // 是否显示提醒框
+      showAlert: false, // 是否显示提醒框
     }
   },
   components: {
@@ -143,6 +143,10 @@ export default {
         }
       }
       // 2.后台登陆
+    },
+    // 获取验证码,图片不能使用ajax请求。并且每次请求路径不能一样。因此添加时间戳
+    async getCaptcha ($event) {
+      $event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
     }
   },
   computed: {
