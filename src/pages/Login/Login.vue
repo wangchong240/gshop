@@ -40,7 +40,7 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha($event)">
+                <img class="get_verification" src="http://localhost:4000/captcha" ref="captcha" alt="captcha" @click="getCaptcha()">
               </section>
             </section>
           </div>
@@ -59,7 +59,7 @@
 
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip'
-import {reqSendCode} from '../../api/index'
+import {reqLoginPwd, reqLoginSms, reqSendCode} from '../../api/index'
 // 倒计时时间
 const COUNT_DOWN_TIME = 30
 
@@ -132,35 +132,51 @@ export default {
       this.showAlert = false
     },
     // 登陆
-    login () {
+    async login () {
+      let result
       // 1.前台表单验证
       if (this.loginType) { // 手机验证码登陆
-        const {rightPhone, code} = this
+        const {rightPhone, phone, code} = this
         if (!rightPhone) {
           // 手机号不正确
-          this.setAlertTip('手机号不正确')
+          return this.setAlertTip('手机号不正确')
         } else if (!/^\d{6}$/.test(code)) {
           // 验证码不正确
-          this.setAlertTip('验证码不正确')
+          return this.setAlertTip('验证码不正确')
         }
+        // 发送ajax请求短信登录
+        result = await reqLoginSms(phone, code)
       } else { // 密码登陆
         const {name, pwd, captcha} = this
         if (!name) {
           // 用户名必须设置
-          this.setAlertTip('用户名必须设置')
+          return this.setAlertTip('用户名必须设置')
         } else if (!pwd) {
           // 密码必须设置
-          this.setAlertTip('密码必须设置')
+          return this.setAlertTip('密码必须设置')
         } else if (!captcha) {
           // 验证码必须设置
-          this.setAlertTip('验证码必须设置')
+          return this.setAlertTip('验证码必须设置')
         }
+        // 发送ajax密码登录
+        result = await reqLoginPwd({name, pwd, captcha})
       }
-      // 2.后台登陆
+      // 2.处理登录返回结果
+      if (result.code === 0) {
+        // 用户信息存入vuex的state中缓存
+        // 路由到个人中心
+        await this.$router.replace('/profile')
+      } else {
+        // 刷新图片验证码
+        this.getCaptcha()
+        this.captcha = ''
+        // 登录失败，显示错误信息
+        this.setAlertTip(result.msg)
+      }
     },
     // 获取验证码,图片不能使用ajax请求。并且每次请求路径不能一样。因此添加时间戳
-    async getCaptcha ($event) {
-      $event.target.src = 'http://localhost:4000/captcha?time=' + Date.now()
+    getCaptcha () {
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time=' + Date.now()
     }
   },
   computed: {
