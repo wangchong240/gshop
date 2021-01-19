@@ -13,7 +13,10 @@ export default {
     'v-footer': FooterGuide
   },
   mounted () {
-    this.$store.dispatch('getAddress');
+    // 加载地址
+    this.$store.dispatch('getAddress')
+    // 页面加载时，请求用户信息，实现自动登录
+    this.$store.dispatch('getUserInfo')
   }
 }
 </script>

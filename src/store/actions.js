@@ -2,7 +2,7 @@
   直接提交mutations的方法
  */
 
-import {reqAddress, reqCategories, reqShops} from '../api/index'
+import {reqAddress, reqCategories, reqShops, reqUser} from '../api/index'
 import {RECEIVE_ADDRESS, RECEIVE_CATEGORIES, RECEIVE_SHOPS, RECEIVE_USER_INFO} from './mutation-types'
 
 export default {
@@ -30,5 +30,14 @@ export default {
   // 同步存入用户信息
   recordUser ({commit}, userInfo) {
     commit(RECEIVE_USER_INFO, {userInfo})
+  },
+
+  // 异步获取用户信息
+  async getUserInfo ({commit}) {
+    const result = await reqUser()
+    if (result.code === 0) {
+      const userInfo = result.data
+      commit(RECEIVE_USER_INFO, {userInfo})
+    }
   }
 }
