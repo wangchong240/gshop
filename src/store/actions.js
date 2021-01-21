@@ -2,8 +2,8 @@
   直接提交mutations的方法
  */
 
-import {reqAddress, reqCategories, reqShops, reqUser} from '../api/index'
-import {RECEIVE_ADDRESS, RECEIVE_CATEGORIES, RECEIVE_SHOPS, RECEIVE_USER_INFO} from './mutation-types'
+import {reqAddress, reqCategories, reqShops, reqUser, reqLogout} from '../api/index'
+import {RECEIVE_ADDRESS, RECEIVE_CATEGORIES, RECEIVE_SHOPS, RECEIVE_USER_INFO, RESET_USER_INFO} from './mutation-types'
 
 export default {
 
@@ -38,6 +38,14 @@ export default {
     if (result.code === 0) {
       const userInfo = result.data
       commit(RECEIVE_USER_INFO, {userInfo})
+    }
+  },
+
+  // 退出登录
+  async logout ({commit}) {
+    const result = await reqLogout()
+    if (result.code === 0) {
+      commit(RESET_USER_INFO)
     }
   }
 }

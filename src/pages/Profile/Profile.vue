@@ -100,7 +100,7 @@
 <script>
 import HeaderTop from '../../components/HeaderTop/HeaderTop'
 import {mapState} from 'vuex'
-import { MessageBox } from 'mint-ui'
+import { MessageBox, Toast } from 'mint-ui'
 
 export default {
   name: 'Profile',
@@ -112,8 +112,17 @@ export default {
   },
   methods: {
     logout () {
-      MessageBox.confirm('确定退出吗?').then(action => {
-      })
+      MessageBox.confirm('确定退出吗?').then(
+        () => {
+          // 退出登录
+          this.$store.dispatch('logout')
+          // 提醒
+          Toast('登出完成');
+        },
+        () => {
+          console.log('点击取消了')
+        }
+      )
     }
   }
 }
