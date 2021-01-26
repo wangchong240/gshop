@@ -2,8 +2,26 @@
   直接提交mutations的方法
  */
 
-import {reqAddress, reqCategories, reqShops, reqUser, reqLogout} from '../api/index'
-import {RECEIVE_ADDRESS, RECEIVE_CATEGORIES, RECEIVE_SHOPS, RECEIVE_USER_INFO, RESET_USER_INFO} from './mutation-types'
+import {
+  reqAddress,
+  reqCategories,
+  reqShops,
+  reqUser,
+  reqLogout,
+  reqShopGoods,
+  reqShopRatings,
+  reqShopInfo
+} from '../api/index'
+import {
+  RECEIVE_ADDRESS,
+  RECEIVE_CATEGORIES,
+  RECEIVE_SHOPS,
+  RECEIVE_USER_INFO,
+  RESET_USER_INFO,
+  RECEIVE_SHOP_RATINGS,
+  RECEIVE_SHOP_INFO,
+  RECEIVE_SHOP_GOODS
+} from './mutation-types'
 
 export default {
 
@@ -46,6 +64,33 @@ export default {
     const result = await reqLogout()
     if (result.code === 0) {
       commit(RESET_USER_INFO)
+    }
+  },
+
+  // 异步请求商家信息
+  async getShopInfo ({commit}) {
+    const result = await reqShopInfo()
+    if (result.code === 0) {
+      const shopInfo = result.data
+      commit(RECEIVE_SHOP_INFO, {shopInfo})
+    }
+  },
+
+  // 异步请求商家评价信息
+  async getShopRatings ({commit}) {
+    const result = await reqShopRatings()
+    if (result.code === 0) {
+      const shopRatings = result.data
+      commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+    }
+  },
+
+  // 异步请求商家食物列表
+  async getShopGoods ({commit}) {
+    const result = await reqShopGoods()
+    if (result.code === 0) {
+      const shopGoods = result.data
+      commit(RECEIVE_SHOP_GOODS, {shopGoods})
     }
   }
 }

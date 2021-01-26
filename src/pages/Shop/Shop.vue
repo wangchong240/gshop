@@ -25,6 +25,9 @@ export default {
   name: 'Shop',
   components: {
     'v-shop-header': ShopHeader
+  },
+  mounted () {
+    this.$store.dispatch('getShopInfo')
   }
 }
 </script>

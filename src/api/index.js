@@ -22,3 +22,9 @@ export const reqLoginSms = (phone, code) => Ajax(BASE_URL + '/login_sms', {phone
 export const reqUser = () => Ajax(BASE_URL + '/userinfo')
 // 10、用户登出
 export const reqLogout = () => Ajax(BASE_URL + '/logout')
+// 11、商家信息,(mock.js模拟数据，所以避免代理拦截，所以不加BASE_URL)
+export const reqShopInfo = () => Ajax('/info')
+// 12、商家评价信息,(mock.js模拟数据，所以避免代理拦截，所以不加BASE_URL)
+export const reqShopRatings = () => Ajax('/ratings')
+// 13、商家食物列表,(mock.js模拟数据，所以避免代理拦截，所以不加BASE_URL)
+export const reqShopGoods = () => Ajax('/goods')
