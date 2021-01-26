@@ -85,12 +85,18 @@ export default {
     }
   },
 
-  // 异步请求商家食物列表
-  async getShopGoods ({commit}) {
+  /**
+   * 异步请求商家食物列表
+   * @param commit vuex参数
+   * @param callback 回调函数，用于初始化插件
+   */
+  async getShopGoods ({commit}, callback) {
     const result = await reqShopGoods()
     if (result.code === 0) {
       const shopGoods = result.data
       commit(RECEIVE_SHOP_GOODS, {shopGoods})
+      // 如果传入回调函数，则执行
+      callback && callback()
     }
   }
 }

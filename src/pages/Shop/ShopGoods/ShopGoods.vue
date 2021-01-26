@@ -49,10 +49,20 @@
 
 <script>
 import {mapState} from 'vuex'
+import BetterScroll from 'better-scroll'
+
 export default {
   name: 'ShopGoods',
   mounted () {
-    this.$store.dispatch('getShopGoods')
+    this.$store.dispatch('getShopGoods', () => {
+      // 列表数据渲染之后初始化better-scroll插件
+      this.$nextTick(() => {
+        // 食物类目滚动
+        new BetterScroll('.menu-wrapper', {})
+        // 食物列表滚动
+        new BetterScroll('.foods-wrapper', {})
+      })
+    })
   },
   computed: {
     ...mapState(['shopGoods'])
