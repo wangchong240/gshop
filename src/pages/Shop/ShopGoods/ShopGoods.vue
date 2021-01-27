@@ -83,6 +83,10 @@ export default {
       foodsScroll.on('scroll', ({x, y}) => {
         this.scrollY = Math.abs(y)
       })
+      // 因为我scroll监听的probeType=2,惯性滑动，不会触发监听，因此，我们再绑定滑动结束的监听。
+      foodsScroll.on('scrollEnd', ({x, y}) => {
+        this.scrollY = Math.abs(y)
+      })
     },
     // 初始化收集类目li的top的Y轴坐标
     _initTops () {
