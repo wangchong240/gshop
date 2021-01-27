@@ -53,6 +53,11 @@ import BetterScroll from 'better-scroll'
 
 export default {
   name: 'ShopGoods',
+  data () {
+    return {
+      scrollY: ''
+    }
+  },
   mounted () {
     this.$store.dispatch('getShopGoods', () => {
       // 列表数据渲染之后初始化better-scroll插件
@@ -60,7 +65,13 @@ export default {
         // 食物类目滚动
         new BetterScroll('.menu-wrapper', {})
         // 食物列表滚动
-        new BetterScroll('.foods-wrapper', {})
+        const foodsScroll = new BetterScroll('.foods-wrapper', {
+          probeType: 2 // 因为惯性滑动，不触发scroll
+        })
+        // 食物列表滚动监听
+        foodsScroll.on('scroll', ({x, y}) => {
+          this.scrollY = Math.abs(y)
+        })
       })
     })
   },
