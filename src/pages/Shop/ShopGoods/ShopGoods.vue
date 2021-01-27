@@ -4,8 +4,8 @@
       <!--食物类目-->
       <div class="menu-wrapper">
         <ul>
-          <!-- todo current 显示当前样式 -->
-          <li class="menu-item" v-for="(good, index) in shopGoods" :key="index">
+          <!--显示当前样式 -->
+          <li class="menu-item" :class="{current: index === currentIndex}" v-for="(good, index) in shopGoods" :key="index">
             <span class="text bottom-border-1px">
               <img class="icon" v-if="good.icon" :src="good.icon"/>
               {{good.name}}
@@ -102,7 +102,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['shopGoods'])
+    ...mapState(['shopGoods']),
+    // 计算属性，根据scrollY值与tops计算当前食物列表滚动到什么位置。注意tops的长度及下标，与goods数组的长度与下标一致
+    currentIndex () {
+      // 计算条件，scrollY、tops
+      const {scrollY, tops} = this
+      // 计算逻辑：scrollY >= currentTop && scrollY < nextTop;返回tops符合条件的数组下标
+      return tops.findIndex((top, index) => {
+        return scrollY >= top && scrollY < tops[index + 1]
+      })
+    }
   }
 }
 </script>
