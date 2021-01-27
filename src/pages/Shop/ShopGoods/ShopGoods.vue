@@ -5,7 +5,7 @@
       <div class="menu-wrapper">
         <ul>
           <!--显示当前样式 -->
-          <li class="menu-item" :class="{current: index === currentIndex}" v-for="(good, index) in shopGoods" :key="index">
+          <li class="menu-item" :class="{current: index === currentIndex}" v-for="(good, index) in shopGoods" :key="index" @click="clickMenuItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" v-if="good.icon" :src="good.icon"/>
               {{good.name}}
@@ -76,15 +76,15 @@ export default {
       // 食物类目滚动
       new BetterScroll('.menu-wrapper', {})
       // 食物列表滚动
-      const foodsScroll = new BetterScroll('.foods-wrapper', {
+      this.foodsScroll = new BetterScroll('.foods-wrapper', {
         probeType: 2 // 因为惯性滑动，不触发scroll
       })
       // 食物列表滚动监听
-      foodsScroll.on('scroll', ({x, y}) => {
+      this.foodsScroll.on('scroll', ({x, y}) => {
         this.scrollY = Math.abs(y)
       })
       // 因为我scroll监听的probeType=2,惯性滑动，不会触发监听，因此，我们再绑定滑动结束的监听。
-      foodsScroll.on('scrollEnd', ({x, y}) => {
+      this.foodsScroll.on('scrollEnd', ({x, y}) => {
         this.scrollY = Math.abs(y)
       })
     },
@@ -103,6 +103,15 @@ export default {
       })
       // 赋值
       this.tops = tops
+    },
+    // 单击goods菜单，滚动foods
+    clickMenuItem (index) {
+      //根据index,获取foods的tops对应的值，计算偏移量
+      const scrollY = this.tops[index]
+      //设置scrollY，立即改变goods菜单选中样式
+      this.scrollY = scrollY
+      //手动平滑滚动foods列表
+      this.foodsScroll.scrollTo(0, -scrollY, 300)
     }
   },
   computed: {
