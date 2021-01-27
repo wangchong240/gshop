@@ -15,7 +15,7 @@
       </div>
       <!--食物列表-->
       <div class="foods-wrapper">
-        <ul>
+        <ul ref="foodsUl">
           <li class="food-list-hook" v-for="(good, index) in shopGoods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -55,25 +55,51 @@ export default {
   name: 'ShopGoods',
   data () {
     return {
-      scrollY: ''
+      scrollY: 0, // 食物列表Y轴坐标，通过better-scroll收集
+      tops: [] // 食物列表中分类li头部的坐标，在列表渲染之后就收集
     }
   },
   mounted () {
     this.$store.dispatch('getShopGoods', () => {
       // 列表数据渲染之后初始化better-scroll插件
       this.$nextTick(() => {
-        // 食物类目滚动
-        new BetterScroll('.menu-wrapper', {})
-        // 食物列表滚动
-        const foodsScroll = new BetterScroll('.foods-wrapper', {
-          probeType: 2 // 因为惯性滑动，不触发scroll
-        })
-        // 食物列表滚动监听
-        foodsScroll.on('scroll', ({x, y}) => {
-          this.scrollY = Math.abs(y)
-        })
+        // 初始化滑动条
+        this._initScroll()
+        // 初始化收集类目li的top的Y轴坐标
+        this._initTops()
       })
     })
+  },
+  methods: {
+    // 初始化滑动条，因为不是时间触动的方案，所以命名以‘_’开头
+    _initScroll () {
+      // 食物类目滚动
+      new BetterScroll('.menu-wrapper', {})
+      // 食物列表滚动
+      const foodsScroll = new BetterScroll('.foods-wrapper', {
+        probeType: 2 // 因为惯性滑动，不触发scroll
+      })
+      // 食物列表滚动监听
+      foodsScroll.on('scroll', ({x, y}) => {
+        this.scrollY = Math.abs(y)
+      })
+    },
+    // 初始化收集类目li的top的Y轴坐标
+    _initTops () {
+      // 食物列表中查找类目li
+      const lis = this.$refs.foodsUl.getElementsByClassName('food-list-hook')
+      // 遍历li数组，初始化tops
+      let tops = []
+      let top = 0
+      tops.push(top)
+      Array.prototype.slice.call(lis).forEach(li => {
+        // 累加类目li的Y轴坐标
+        top = top + li.clientHeight
+        tops.push(top)
+      })
+      // 赋值
+      this.tops = tops
+    }
   },
   computed: {
     ...mapState(['shopGoods'])
