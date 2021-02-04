@@ -1,6 +1,8 @@
 <template>
   <div class="cartcontrol">
-    <div class="iconfont icon-remove_circle_outline" v-if="food.count" @click="updateFoodCount(false)"></div>
+    <transition name="fade">
+      <div class="iconfont icon-remove_circle_outline" v-if="food.count" @click="updateFoodCount(false)"></div>
+    </transition>
     <div class="cart-count" v-if="food.count">{{food.count}}</div>
     <div class="iconfont icon-add_circle" @click="updateFoodCount(true)"></div>
   </div>
@@ -14,7 +16,7 @@ export default {
   },
   methods: {
     updateFoodCount (isAdd) {
-      this.$store.dispatch('updateFoodCount', {isAdd, food: this.food})
+      this.$store.dispatch('updateFoodCount', {isAdd, 'food': this.food})
     }
   }
 }
@@ -31,6 +33,11 @@ export default {
     font-size: 24px
     color: rgb(0, 160, 220)
   .icon-remove_circle_outline
+    &.fade-enter-active, .fade-leave-active
+      transition all .3s
+    &.fade-enter, .fade-leave-to
+      opacity 0
+      transform translateX(15px) rotate(180deg)
     display: inline-block
     padding 6px
     line-height 24px
