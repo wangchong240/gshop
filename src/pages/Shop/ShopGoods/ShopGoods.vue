@@ -43,6 +43,8 @@
           </li>
         </ul>
       </div>
+      <!--购物车-->
+      <v-shop-cart/>
     </div>
     <!--食物详情组件-->
     <v-food :food="currentFood" ref="currentFood"/>
@@ -54,6 +56,7 @@ import {mapState} from 'vuex'
 import BetterScroll from 'better-scroll'
 import CartControl from '../../../components/CartControl/CartControl'
 import Food from '../../../components/Food/Food'
+import ShopCart from '../../../components/ShopCart/ShopCart'
 
 export default {
   name: 'ShopGoods',
@@ -140,7 +143,8 @@ export default {
   },
   components: {
     'v-cart-control': CartControl,
-    'v-food': Food
+    'v-food': Food,
+    'v-shop-cart': ShopCart
   }
 }
 </script>
