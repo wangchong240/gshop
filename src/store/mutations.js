@@ -1,6 +1,7 @@
 /*
   直接操作state的方法
  */
+import Vue from 'vue'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORIES,
@@ -8,7 +9,9 @@ import {
   RESET_USER_INFO,
   RECEIVE_SHOP_GOODS,
   RECEIVE_SHOP_INFO,
-  RECEIVE_SHOP_RATINGS
+  RECEIVE_SHOP_RATINGS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
 
 export default {
@@ -42,5 +45,21 @@ export default {
 
   [RECEIVE_SHOP_RATINGS] (state, {shopRatings}) {
     state.shopRatings = shopRatings
+  },
+
+  [INCREMENT_FOOD_COUNT] (food) {
+    if (!food.count) {
+      // 原来food中，没有count属性，则需要调用vue.set() 方法，使其count属性能够双向绑定页面元素
+      Vue.set(food, 'count', 1)
+    } else {
+      food.count++
+    }
+  },
+
+  [DECREMENT_FOOD_COUNT] (food) {
+    // 防止快速点击，count出现负值
+    if (food.count) {
+      food.count--
+    }
   }
 }

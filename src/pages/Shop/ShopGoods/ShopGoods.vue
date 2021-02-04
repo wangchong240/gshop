@@ -19,7 +19,7 @@
           <li class="food-list-hook" v-for="(good, index) in shopGoods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-if="good.foods" v-for="(food, index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-if="good.foods" v-for="(food, index) in good.foods" @click="showFood(food)" :key="index">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -44,6 +44,8 @@
         </ul>
       </div>
     </div>
+    <!--食物详情组件-->
+    <v-food :food="currentFood" ref="currentFood"/>
   </div>
 </template>
 
@@ -51,13 +53,15 @@
 import {mapState} from 'vuex'
 import BetterScroll from 'better-scroll'
 import CartControl from '../../../components/CartControl/CartControl'
+import Food from '../../../components/Food/Food'
 
 export default {
   name: 'ShopGoods',
   data () {
     return {
       scrollY: 0, // 食物列表Y轴坐标，通过better-scroll收集
-      tops: [] // 食物列表中分类li头部的坐标，在列表渲染之后就收集
+      tops: [], // 食物列表中分类li头部的坐标，在列表渲染之后就收集
+      currentFood: {} //点击之后当前的食物，用于显示详情
     }
   },
   mounted () {
@@ -113,6 +117,13 @@ export default {
       this.scrollY = scrollY
       //手动平滑滚动foods列表
       this.foodsScroll.scrollTo(0, -scrollY, 300)
+    },
+    // 显示食物详情
+    showFood(food) {
+      // 设置当前食物
+      this.currentFood = food
+      // 显示食物详情：父组件调用子组件的方法
+      this.$refs.currentFood.toggleFood()
     }
   },
   computed: {
@@ -128,7 +139,8 @@ export default {
     }
   },
   components: {
-    'v-cart-control': CartControl
+    'v-cart-control': CartControl,
+    'v-food': Food
   }
 }
 </script>

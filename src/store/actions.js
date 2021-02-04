@@ -20,7 +20,9 @@ import {
   RESET_USER_INFO,
   RECEIVE_SHOP_RATINGS,
   RECEIVE_SHOP_INFO,
-  RECEIVE_SHOP_GOODS
+  RECEIVE_SHOP_GOODS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
 
 export default {
@@ -97,6 +99,17 @@ export default {
       commit(RECEIVE_SHOP_GOODS, {shopGoods})
       // 如果传入回调函数，则执行
       callback && callback()
+    }
+  },
+
+  /**
+   * 同步更新food的count值
+   */
+  updateFoodCount ({commit}, {isAdd, food}) {
+    if (isAdd) {
+      commit(INCREMENT_FOOD_COUNT, food)
+    } else {
+      commit(DECREMENT_FOOD_COUNT, food)
     }
   }
 }
