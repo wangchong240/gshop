@@ -51,7 +51,6 @@ export default {
     if (!food.count) {
       // 原来food中，没有count属性，则需要调用vue.set() 方法，使其count属性能够双向绑定页面元素
       Vue.set(food, 'count', 1)
-      food.count = 1
     } else {
       food.count++
     }
