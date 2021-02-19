@@ -9,8 +9,8 @@
             </div>
             <div class="num" v-if="totalCount">{{totalCount}}</div>
           </div>
-          <div class="price highlight">￥{{totalPrice}}</div>
-          <div class="desc">另需配送费￥{{shopInfo.deliverPrice}} 元</div>
+          <div class="price" :class="{highlight: totalCount}">￥{{totalPrice}}</div>
+          <div class="desc">另需配送费￥{{shopInfo.deliveryPrice}} 元</div>
         </div>
         <div class="content-right">
           <div class="pay" :class="payClass">
@@ -52,21 +52,21 @@ export default {
     ...mapState(['cartFoods', 'shopInfo']),
     ...mapGetters(['totalCount', 'totalPrice']),
     payClass () {
-      const {totalCount} = this
+      const {totalPrice} = this
       const {minPrice} = this.shopInfo
-      if (totalCount >= minPrice) {
+      if (totalPrice >= minPrice) {
         return 'enough'
       } else {
         return 'not-enough'
       }
     },
     payText () {
-      const {totalCount} = this
+      const {totalPrice} = this
       const {minPrice} = this.shopInfo
-      if (totalCount === 0) {
+      if (totalPrice === 0) {
         return  `还差￥${minPrice} 元起送`
-      } else if (totalCount < minPrice) {
-        return  `还差￥${minPrice - totalCount} 元起送`
+      } else if (totalPrice < minPrice) {
+        return  `还差￥${minPrice - totalPrice} 元起送`
       } else {
         return  '支付'
       }

@@ -51,6 +51,8 @@ export default {
     if (!food.count) {
       // 原来food中，没有count属性，则需要调用vue.set() 方法，使其count属性能够双向绑定页面元素
       Vue.set(food, 'count', 1)
+      // 添加购物车,第二次添加无需修改。应为是指定同一变量
+      state.cartFoods.push(food)
     } else {
       food.count++
     }
@@ -60,6 +62,10 @@ export default {
     // 防止快速点击，count出现负值
     if (food.count) {
       food.count--
+      // 购物数量为零，移除商品
+      if (food.count === 0) {
+        state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
+      }
     }
   }
 }
