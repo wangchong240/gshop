@@ -22,3 +22,5 @@ export const RECEIVE_SHOP_GOODS = 'receive_shop_goods'
 export const INCREMENT_FOOD_COUNT = 'increment_food_count'
 // 减少food中的count
 export const DECREMENT_FOOD_COUNT = 'decrement_food_count'
+// 清空购物车
+export const CLEAR_SHOP_CART = 'clear_shop_cart'
