@@ -79,7 +79,7 @@ export default {
     })
   },
   methods: {
-    // 初始化滑动条，因为不是时间触动的方案，所以命名以‘_’开头
+    // 初始化滑动条，因为不是事件触动的方案，所以命名以‘_’开头
     _initScroll () {
       // 食物类目滚动
       new BetterScroll('.menu-wrapper', {})
