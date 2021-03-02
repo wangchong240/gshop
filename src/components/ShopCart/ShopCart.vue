@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import BetterScroll from 'better-scroll'
 import {mapState, mapGetters} from 'vuex'
 import CartControl from '../CartControl/CartControl'
 export default {
@@ -91,6 +92,14 @@ export default {
         this.isShow = false
         return false
       }
+
+      // 列表显示时，创建滚动
+      if (this.isShow) {
+        this.$nextTick(() => {
+          new BetterScroll('.list-content', {});
+        })
+      }
+
       return this.isShow
     }
   },
