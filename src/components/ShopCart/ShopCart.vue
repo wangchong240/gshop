@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="shopcart-list" v-show="isShow">
+      <div class="shopcart-list" v-show="listShow">
         <div class="list-header">
           <h1 class="title">购物车</h1>
           <span class="empty">清空</span>
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="list-mask" v-show="isShow" @click="toggleShow()"></div>
+    <div class="list-mask" v-show="listShow" @click="toggleShow()"></div>
   </div>
 </template>
 
@@ -52,7 +52,10 @@ export default {
   },
   methods: {
     toggleShow () {
-      this.isShow = !this.isShow
+      // 只有在totalCount > 0 才改变 isShow值
+      if (this.totalCount > 0) {
+        this.isShow = !this.isShow
+      }
     }
   },
   computed: {
@@ -77,6 +80,14 @@ export default {
       } else {
         return  '支付'
       }
+    },
+    listShow () {
+      if (this.totalCount === 0) {
+        // 重置isShow
+        this.isShow = false
+        return false
+      }
+      return this.isShow
     }
   },
   components: {
@@ -249,8 +260,8 @@ export default {
   height 100%
   z-index 40
   backdrop-filter blur(10px)
-  opacity 1
-  background rgba(7, 17, 27, 0.6)
+  opacity 0.2
+  background black
   &.fade-enter-active, &.fade-leave-active
     transition all 0.5s
   &.fade-enter, &.fade-leave-to
