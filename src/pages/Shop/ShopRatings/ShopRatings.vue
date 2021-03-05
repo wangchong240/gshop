@@ -27,15 +27,15 @@
       <div class="split"></div>
       <div class="ratingselect">
         <div class="rating-type border-1px">
-          <span class="block positive" :class="{active : selectType === 2}" @click="selectType = 2">
+          <span class="block positive" :class="{active : selectType === 2}" @click="toggleRatingType(2)">
             全部
             <span class="count">{{shopRatings.length}}</span>
           </span>
-          <span class="block positive" :class="{active : selectType === 0}" @click="selectType = 0">
+          <span class="block positive" :class="{active : selectType === 0}" @click="toggleRatingType(0)">
             满意
             <span class="count">{{positive}}</span>
           </span>
-          <span class="block negative" :class="{active : selectType === 1}" @click="selectType = 1">
+          <span class="block negative" :class="{active : selectType === 1}" @click="toggleRatingType(1)">
             不满意
             <span class="count">{{shopRatings.length - positive}}</span>
           </span>
@@ -88,7 +88,7 @@ export default {
   mounted () {
     this.$store.dispatch('getShopRatings', () => {
       this.$nextTick(() => {
-        new BetterScroll(this.$refs.ratings, {})
+        this.scroll = new BetterScroll(this.$refs.ratings, {})
       })
     })
   },
@@ -115,6 +115,19 @@ export default {
   methods: {
     format (date) {
       return Moment(date).format("YYYY-MM-DD HH:mm:ss")
+    },
+    toggleRatingType(ratingType) {
+      this.selectType = ratingType
+    }
+  },
+  watch: {
+    // 监控filterRatings。发生变化时，刷新BetterScroll
+    filterRatings() {
+      if(this.scroll) {
+        this.$nextTick(() => {
+          this.scroll.refresh();
+        })
+      }
     }
   },
   components: {
