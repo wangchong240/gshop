@@ -62,7 +62,7 @@
                 <span class="iconfont" :class="rating.rateType === 0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
                 <span class="item" v-for="(commend,index) in rating.recommend" :key="index">{{commend}}</span>
               </div>
-              <div class="time">{{rating.rateTime}}</div>
+              <div class="time"> {{format(rating.rateTime)}}</div>
             </div>
           </li>
         </ul>
@@ -71,6 +71,7 @@
   </div>
 </template>
 <script>
+import Moment from 'moment'
 import BetterScroll from 'better-scroll'
 import Star from '../../../components/Star/Star'
 import {mapState, mapGetters} from 'vuex'
@@ -109,6 +110,11 @@ export default {
 
         return (selectType === 2 || selectType === rateType) && (!onSelectShowText || text.length > 0)
       })
+    }
+  },
+  methods: {
+    format (date) {
+      return Moment(date).format("YYYY-MM-DD HH:mm:ss")
     }
   },
   components: {
