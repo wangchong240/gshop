@@ -80,11 +80,13 @@ export default {
   },
 
   // 异步请求商家评价信息
-  async getShopRatings ({commit}) {
+  async getShopRatings ({commit}, callback) {
     const result = await reqShopRatings()
     if (result.code === 0) {
       const shopRatings = result.data
       commit(RECEIVE_SHOP_RATINGS, {shopRatings})
+      // 如果传入回调函数，则执行
+      callback && callback()
     }
   },
 
