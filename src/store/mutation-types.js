@@ -24,3 +24,5 @@ export const INCREMENT_FOOD_COUNT = 'increment_food_count'
 export const DECREMENT_FOOD_COUNT = 'decrement_food_count'
 // 清空购物车
 export const CLEAR_SHOP_CART = 'clear_shop_cart'
+// 搜索附近商家
+export const RECEIVE_SEARCH_SHOP = 'receive_search_shop'

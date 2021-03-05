@@ -10,7 +10,8 @@ import {
   reqLogout,
   reqShopGoods,
   reqShopRatings,
-  reqShopInfo
+  reqShopInfo,
+  reqSearchShops
 } from '../api/index'
 import {
   RECEIVE_ADDRESS,
@@ -23,7 +24,8 @@ import {
   RECEIVE_SHOP_GOODS,
   INCREMENT_FOOD_COUNT,
   DECREMENT_FOOD_COUNT,
-  CLEAR_SHOP_CART
+  CLEAR_SHOP_CART,
+  RECEIVE_SEARCH_SHOP
 } from './mutation-types'
 
 export default {
@@ -121,5 +123,17 @@ export default {
    */
   clearShopCart ({commit}) {
     commit(CLEAR_SHOP_CART)
+  },
+
+  /**
+   * 异步搜索商家
+   */
+  async searchShops ({commit, state}, keyword) {
+    const geohash = state.latitude + ',' + state.longitude
+    const result = await reqSearchShops(geohash, keyword)
+    if (result.code === 0) {
+      const searchShop = result.data
+      commit(RECEIVE_SEARCH_SHOP, {searchShop})
+    }
   }
 }
