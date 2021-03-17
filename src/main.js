@@ -9,6 +9,7 @@ import store from './store'
 
 // 在主文件中加载mockServer.js。只需加载即可，类似于导入样式
 import './mock/mockServer'
+import './filters'
 
 // 全局注册mi-button,按需引入
 Vue.component(Button.name, Button)
