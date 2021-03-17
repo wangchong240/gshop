@@ -1,9 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Msite from '../pages/Msite/Msite'
-import Order from '../pages/Order/Order'
-import Profile from '../pages/Profile/Profile'
-import Search from '../pages/Search/Search'
+// import Msite from '../pages/Msite/Msite'
+// import Order from '../pages/Order/Order'
+// import Profile from '../pages/Profile/Profile'
+// import Search from '../pages/Search/Search'
+
+//路由组件的懒加载，目的就是，防止组件的文件太大。一次全部加载会响应较慢。因此将大的组件的js进行拆分。实现按需加载的效果
+//但是不是所有的组件都需要懒加载，毕竟懒加载是需要后台请求。如果代码量不大的话。没有必要使用懒加载。
+const Msite = () => import('../pages/Msite/Msite')
+const Order = () => import('../pages/Order/Order')
+const Profile = () => import('../pages/Profile/Profile')
+const Search = () => import('../pages/Search/Search')
+
 import Login from '../pages/Login/Login'
 import Shop from '../pages/Shop/Shop'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods'
