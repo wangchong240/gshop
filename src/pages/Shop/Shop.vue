@@ -14,8 +14,11 @@
         <router-link to="/shop/info" replace>商家</router-link>
       </div>
     </div>
-    <!--子路由显示信息-->
-    <router-view></router-view>
+    <!--路由缓存-->
+    <keep-alive>
+      <!--子路由显示信息-->
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
